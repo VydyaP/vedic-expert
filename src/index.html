@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="panchanga.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yajurveda Brāhmaṇa – 1.1 (Classes & Paras)</title>
+  <style>
+    body{font-family:system-ui,"Segoe UI",sans-serif;line-height:1.6;padding:2rem;max-width:800px;margin:auto}
+    h1,h2{text-align:center;margin:0.25rem 0}
+    .audio-player{text-align:center;margin:1.5rem 0}
+    .progress-container{margin:1.5rem 0}
+    .progress-label{font-weight:500;margin-bottom:0.25rem}
+    .progress{background:#e5e7eb;border-radius:8px;height:28px;overflow:hidden;margin-bottom:1.25rem}
+    .progress-bar{background:#16a34a;color:#fff;height:100%;display:flex;align-items:center;justify-content:center;font-weight:600;min-width:90px}
+    details.class-block{border:1px solid #d1d5db;border-radius:8px;margin:1.25rem 0;padding:0.75rem}
+    summary.class-summary{cursor:pointer;font-size:1.15rem;font-weight:600}
+    details.para-block{border:1px solid #d1d5db;border-radius:6px;padding:0.75rem;margin:0.75rem 0}
+    summary.para-summary{cursor:pointer;font-weight:600}
+    .placeholder{color:#6b7280;font-style:italic}
+    .logout-btn {
+      position: fixed;
+      top: 24px;
+      right: 32px;
+      background: #d32f2f;
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.3rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(211,47,47,0.08);
+      transition: background 0.2s;
+    }
+    .logout-btn:hover {
+      background: #b71c1c;
+    }
+    .greeting {
+      position: fixed;
+      top: 24px;
+      left: 32px;
+      background: #fffbe7;
+      color: #7c4d00;
+      border-radius: 6px;
+      padding: 0.6rem 1.3rem;
+      font-size: 1rem;
+      font-weight: 500;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(251,176,52,0.08);
+      border: 1px solid #ffe082;
+      min-width: 120px;
+      text-align: left;
+      display: none;
+    }
+    .main-heading {
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: #7c4d00;
+      text-align: center;
+      margin-top: 1.5rem;
+      margin-bottom: 2.2rem;
+      letter-spacing: 1px;
+      font-family: inherit;
+    }
+    .panchanga-widget {
+      position: fixed;
+      top: 24px;
+      right: 160px;
+      background: #fffbe7;
+      color: #7c4d00;
+      border-radius: 6px;
+      padding: 0.35rem 0.7rem 0.45rem 0.7rem;
+      font-size: 0.97rem;
+      font-weight: 500;
+      z-index: 1000;
+      box-shadow: 0 1px 4px rgba(251,176,52,0.08);
+      border: 1px solid #ffe082;
+      min-width: 170px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      height: 2.2rem;
+    }
+    .panchanga-widget label {
+      margin-right: 0.1rem;
+      font-size: 0.97rem;
+      font-weight: 500;
+    }
+    .panchanga-widget select {
+      font-size: 0.97rem;
+      border-radius: 4px;
+      border: 1px solid #ffe082;
+      padding: 0.1rem 0.3rem;
+      margin-left: 0.1rem;
+      background: #fff;
+      color: #7c4d00;
+      height: 1.6rem;
+    }
+    #panchanga-loading {
+      font-size: 0.95rem;
+      color: #bfa100;
+      margin-left: 0.3rem;
+    }
+    #panchanga-result {
+      margin-left: 0.4rem;
+      margin-top: 0;
+      color: #7c4d00;
+      font-size: 0.95rem;
+      font-weight: 400;
+      max-width: 180px;
+      word-break: break-word;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .panchanga-icon-btn {
+      position: fixed;
+      top: 24px;
+      right: 160px;
+      width: 2.3rem;
+      height: 2.3rem;
+      background: #fffbe7;
+      color: #bfa100;
+      border: 1.5px solid #ffe082;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(251,176,52,0.08);
+      z-index: 1100;
+      transition: background 0.18s, box-shadow 0.18s;
+    }
+    .panchanga-icon-btn:hover {
+      background: #fff3c0;
+      box-shadow: 0 2px 8px rgba(251,176,52,0.13);
+    }
+    .panchanga-popup {
+      display: none;
+      position: fixed;
+      top: 60px;
+      right: 140px;
+      background: #fffbe7;
+      color: #7c4d00;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(251,176,52,0.13);
+      border: 1.5px solid #ffe082;
+      min-width: 220px;
+      padding: 1rem 1.1rem 1rem 1.1rem;
+      z-index: 1200;
+      font-size: 0.97rem;
+      font-weight: 500;
+      animation: fadeIn 0.18s;
+    }
+    .panchanga-popup.active {
+      display: block;
+    }
+    .panchanga-popup label {
+      font-size: 0.97rem;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+    .panchanga-popup select {
+      font-size: 0.97rem;
+      border-radius: 4px;
+      border: 1px solid #ffe082;
+      padding: 0.1rem 0.3rem;
+      background: #fff;
+      color: #7c4d00;
+      margin-bottom: 0.5rem;
+      width: 100%;
+    }
+    #panchanga-loading {
+      font-size: 0.95rem;
+      color: #bfa100;
+      margin-left: 0.3rem;
+    }
+    #panchanga-result {
+      color: #7c4d00;
+      font-size: 0.95rem;
+      font-weight: 400;
+      max-width: 220px;
+      word-break: break-word;
+      margin-top: 0.5rem;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <!-- Firebase Auth -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA4ZuSrRLEW209IYmTJvQRQkyr3uge2ACY",
+      authDomain: "vedic-expert.firebaseapp.com",
+      projectId: "vedic-expert",
+      storageBucket: "vedic-expert.firebasestorage.app",
+      messagingSenderId: "723350711577",
+      appId: "1:723350711577:web:010239ddc18a5d3bf8a988",
+      measurementId: "G-QGL755SMED"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    // Auth protection
+    auth.onAuthStateChanged(function(user) {
+      if (!user) {
+        window.location.href = 'landing.html';
+      } else {
+        // Show greeting with name
+        var greeting = document.getElementById('greeting');
+        if (greeting) {
+          greeting.textContent = 'Hello, ' + (user.displayName || 'Seeker');
+          greeting.style.display = 'block';
+        }
+      }
+    });
+    // Logout function
+    function logout() {
+      auth.signOut().then(function() {
+        window.location.href = 'landing.html';
+      });
+    }
+    // Panchanga widget logic (popup)
+    async function fetchPanchanga(placeId) {
+      const loading = document.getElementById('panchanga-loading');
+      const resultDiv = document.getElementById('panchanga-result');
+      loading.style.display = 'inline';
+      resultDiv.textContent = '';
+      const today = new Date();
+      const day = today.getDate();
+      const month = today.getMonth() + 1;
+      const year = today.getFullYear();
+      const url = 'https://daily-panchang-api.p.rapidapi.com/indian-api/v1/find-panchang';
+      const options = {
+        method: 'POST',
+        headers: {
+          'x-rapidapi-key': '49b937b8bbmsh00c43529634ec18p18b5b6jsn3ba5a804a22e',
+          'x-rapidapi-host': 'daily-panchang-api.p.rapidapi.com',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          day: day,
+          month: month,
+          year: year,
+          placeId: placeId
+        })
+      };
+      try {
+        const response = await fetch(url, options);
+        const data = await response.json();
+        // Display a summary (customize as needed)
+        console.log('API response:', data);
+        if (data && data.data) {
+          resultDiv.innerHTML =
+            '<b>Tithi:</b> ' + (data.data.tithi?.details?.tithi_number || '-') + ' - ' + (data.data.tithi?.details?.tithi_name || '-') + '<br>' +
+            '<b>Paksha:</b> ' + (data.data.tithi?.details?.paksha || '-') + '<br>' +
+            '<b>Weekday:</b> ' + (data.data.weekday?.weekday || '-') + '<br>' +
+            '<b>Sunrise:</b> ' + (data.data.sunrise || '-') + '<br>' +
+            '<b>Sunset:</b> ' + (data.data.sunset || '-');
+        } else {
+          resultDiv.textContent = 'No data available.';
+        }
+      } catch (err) {
+        resultDiv.textContent = 'Error fetching Panchanga.';
+      } finally {
+        loading.style.display = 'none';
+      }
+    }
+    function closePanchangaPopupOnOutsideClick(e) {
+      const popup = document.getElementById('panchanga-popup');
+      const btn = document.getElementById('panchanga-icon-btn');
+      if (!popup.contains(e.target) && e.target !== btn) {
+        popup.classList.remove('active');
+        document.removeEventListener('mousedown', closePanchangaPopupOnOutsideClick);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      const btn = document.getElementById('panchanga-icon-btn');
+      const popup = document.getElementById('panchanga-popup');
+      btn.addEventListener('click', function() {
+        popup.classList.toggle('active');
+        if (popup.classList.contains('active')) {
+          document.addEventListener('mousedown', closePanchangaPopupOnOutsideClick);
+        } else {
+          document.removeEventListener('mousedown', closePanchangaPopupOnOutsideClick);
+        }
+      });
+      // Fetch Panchanga on load and on city change
+      const select = document.getElementById('city-select');
+      fetchPanchanga(select.value);
+      select.addEventListener('change', function() {
+        fetchPanchanga(this.value);
+      });
+    });
+  </script>
+</head>
+<body>
+  <div id="greeting" class="greeting"></div>
+  <button id="panchanga-icon-btn" class="panchanga-icon-btn" title="Show Panchanga">🗓️</button>
+  <div id="panchanga-popup" class="panchanga-popup">
+    <label for="city-select">Panchanga for:</label>
+    <select id="city-select">
+      <option value="ChIJL_P_CXMEDTkRw0ZdG-0GVvw">Bangalore, India</option>
+      <option value="ChIJ2eUgeAK6j4ARbn5u_wAGqWA">San Francisco, USA</option>
+      <option value="ChIJGVtI4by3t4kRr51d_Qm_x58">New York, USA</option>
+      <option value="ChIJwULG5WSOyzsR0fruZnruoJw">Mumbai, India</option>
+      <option value="ChIJdd4hrwug2jERoH1QyRPHb1w">Delhi, India</option>
+      <option value="ChIJz2C7C4lOyzsR3O2L5w6hC0w">Chennai, India</option>
+      <option value="ChIJxU60yXfyzjsRqa6GgKJrC8E">Hyderabad, India</option>
+      <option value="ChIJGzE9DS1l44kRoOhiASS_fHg">Kolkata, India</option>
+      <option value="ChIJm7x6r8b1yIkRk3iC1w6L6Dg">Rochester, USA</option>
+      <option value="ChIJE9on3F3HwoAR9AhGJW_fL-I">Los Angeles, USA</option>
+      <option value="ChIJ7cv00DwsDogRAMDACa2m4K8">Chicago, USA</option>
+      <option value="ChIJAYWNSLS4QIYRrCvx2zqz0To">Houston, USA</option>
+    </select>
+    <span id="panchanga-loading" style="display:none;">Loading...</span>
+    <div id="panchanga-result"></div>
+  </div>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+  <div class="main-heading">Vedic Expert</div>
+  <h1>Yajurveda Brāhmaṇa</h1>
+  <h2>1st Aṣṭaka – 1st Prapāṭhaka</h2>
+
+  <!-- overall progress -->
+  <h3>Progress</h3>
+  <div class="progress-container">
+    <div class="progress-label">Prapāṭhaka 1.1: 50 / 80 paras completed</div>
+    <div class="progress"><div class="progress-bar" style="width:62.5%">62.5%</div></div>
+
+    <div class="progress-label">Overall Brāhmaṇa: 50 / 1832 paras completed</div>
+    <div class="progress"><div class="progress-bar" style="width:2.73%">2.73%</div></div>
+  </div>
+
+  <!-- class sections -->
+  <section>
+    <h3>Classes</h3>
+
+    <!-- CLASS 1 -->
+    <details class="class-block" open>
+      <summary class="class-summary">Class 1 – Paras 1 – 25</summary>
+      <div class="audio-player">
+        <audio controls>
+          <source src="./public/audio/Bramhana 1A 1P 0-25.m4a" type="audio/mp4">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+      <!-- Paragraph 1–25 placeholders (sample 2 shown) -->
+      <details class="para-block" open>
+        <summary class="para-summary">Paragraph 1</summary>
+        <p class="placeholder">Kannada text…</p>
+        <p class="placeholder">English meaning coming soon…</p>
+      </details>
+      <details class="para-block">
+        <summary class="para-summary">Paragraph 2</summary>
+        <p class="placeholder">Kannada text…</p>
+        <p class="placeholder">English meaning coming soon…</p>
+      </details>
+      <!-- Repeat up to Paragraph 25 -->
+    </details>
+
+    <!-- CLASS 2 -->
+    <details class="class-block">
+      <summary class="class-summary">Class 2 – Paras 26 – 50</summary>
+      <div class="audio-player">
+        <audio controls>
+          <source src="./public/audio/Bramhana 1A 1P 26-50.m4a" type="audio/mp4">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+      <!-- You can embed screenshots or use paragraph blocks -->
+      <div class="placeholder">Screenshots / Kannada text for paras 26‑50 will go here…</div>
+      <!-- Sample paragraph blocks -->
+      <details class="para-block" open>
+        <summary class="para-summary">Paragraph 26</summary>
+    
+        <!-- Kannada scan -->
+        <img src="./public/image/Bramhana 1A 1P 26.png"
+             alt="Yajurveda Brāhmaṇa 1.1 §26 Kannada text"
+             style="max-width:100%;height:auto;display:block;margin:0.5rem 0;" />
+    
+        <!-- keep the meaning placeholder until you translate -->
+        <p class="placeholder">English meaning coming soon…</p>
+      </details>
+    
+      <details class="para-block">
+        <summary class="para-summary">Paragraph 27</summary>
+        <p class="placeholder">Kannada text…</p>
+        <p class="placeholder">English meaning coming soon…</p>
+      </details>
+      <!-- Repeat up to Paragraph 50 -->
+    </details>
+
+    <!-- Add more <details class="class-block"> for Classes 3–8 as you progress -->
+  </section>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vedic Expert - Ancient Wisdom Meets Modern Clarity</title>
+    <meta name="description" content="A modern sanctuary for seekers of timeless Vedic knowledge" />
+    <meta name="author" content="Vedic Sanctuary" />
+    <!-- Google Fonts for Sanskrit/Devanagari and elegant serif -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <meta property="og:title" content="vedic-sanctuary" />
+    <meta property="og:description" content="Lovable Generated Project" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lovable_dev" />
+    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <style>
+      body {
+        min-height: 100vh;
+        margin: 0;
+        background: linear-gradient(135deg, #f8e7c9 0%, #e0c3fc 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Crimson Text', 'Noto Serif Devanagari', serif;
+      }
+      .landing-container {
+        background: rgba(255,255,255,0.95);
+        padding: 3rem 2.5rem 2.5rem 2.5rem;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.12);
+        text-align: center;
+        max-width: 420px;
+      }
+      .vedic-title {
+        font-family: 'Noto Serif Devanagari', serif;
+        font-size: 2.2rem;
+        color: #7c4d00;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+      }
+      .vedic-desc {
+        color: #5d4037;
+        font-size: 1.1rem;
+        margin-bottom: 2.2rem;
+        font-family: 'Crimson Text', serif;
+      }
+      .begin-btn {
+        background: linear-gradient(90deg, #fbb034 0%, #ffdd00 100%);
+        color: #4e260e;
+        border: none;
+        padding: 0.9rem 2.2rem;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(251,176,52,0.08);
+        transition: background 0.2s, color 0.2s;
+        margin-bottom: 1.2rem;
+      }
+      .begin-btn:hover {
+        background: linear-gradient(90deg, #ffdd00 0%, #fbb034 100%);
+        color: #7c4d00;
+      }
+      .vedic-symbol {
+        font-size: 2.8rem;
+        margin-bottom: 1.2rem;
+        color: #b3882b;
+      }
+      #error {
+        color: #d32f2f;
+        margin-top: 0.7rem;
+        min-height: 1.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="landing-container">
+      <div class="vedic-symbol">ॐ</div>
+      <div class="vedic-title">Vedic Expert</div>
+      <div class="vedic-desc">Ancient Wisdom Meets Modern Clarity.<br>Begin your journey into the timeless teachings of the Vedas.</div>
+      <button class="begin-btn" id="begin-btn">Begin your journey</button>
+      <div id="error"></div>
+    </div>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyA4ZuSrRLEW209IYmTJvQRQkyr3uge2ACY",
+        authDomain: "vedic-expert.firebaseapp.com",
+        projectId: "vedic-expert",
+        storageBucket: "vedic-expert.firebasestorage.app",
+        messagingSenderId: "723350711577",
+        appId: "1:723350711577:web:010239ddc18a5d3bf8a988",
+        measurementId: "G-QGL755SMED"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const beginBtn = document.getElementById('begin-btn');
+      const errorDiv = document.getElementById('error');
+      beginBtn.onclick = function() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider)
+          .then(() => {
+            window.location.href = 'index.html';
+          })
+          .catch((error) => {
+            errorDiv.textContent = error.message;
+          });
+      };
+    </script>
+  </body>
+</html> 

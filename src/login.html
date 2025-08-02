@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Vedic Expert</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Roboto', sans-serif;
+    }
+    .login-container {
+      background: #fff;
+      padding: 2.5rem 2.5rem 2rem 2.5rem;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+      text-align: center;
+      min-width: 340px;
+    }
+    .logo {
+      width: 60px;
+      margin-bottom: 1.2rem;
+    }
+    h2 {
+      margin-bottom: 1.2rem;
+      font-weight: 700;
+      color: #3a3a3a;
+    }
+    .desc {
+      color: #666;
+      margin-bottom: 2rem;
+      font-size: 1.05rem;
+    }
+    .google-btn, .main-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #4285F4;
+      color: #fff;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 1.2rem;
+      width: 100%;
+    }
+    .google-btn:hover, .main-btn:hover {
+      background: #357ae8;
+    }
+    .google-icon {
+      width: 22px;
+      height: 22px;
+      background: #fff;
+      border-radius: 50%;
+      padding: 2px;
+    }
+    #error {
+      color: #d32f2f;
+      margin-top: 0.5rem;
+      min-height: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="logo" alt="Google Logo">
+    <h2>Welcome to Vedic Expert</h2>
+    <div class="desc">Sign in with your Google account to continue.</div>
+    <button id="google-signin" class="google-btn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="google-icon" alt="Google Icon">
+      Sign in with Google
+    </button>
+    <button id="goto-main" class="main-btn" style="display:none;">Go to Vedic Expert</button>
+    <div id="error"></div>
+  </div>
+
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <!-- Firebase Auth -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA4ZuSrRLEW209IYmTJvQRQkyr3uge2ACY",
+      authDomain: "vedic-expert.firebaseapp.com",
+      projectId: "vedic-expert",
+      storageBucket: "vedic-expert.firebasestorage.app",
+      messagingSenderId: "723350711577",
+      appId: "1:723350711577:web:010239ddc18a5d3bf8a988",
+      measurementId: "G-QGL755SMED"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const signinBtn = document.getElementById('google-signin');
+    const gotoMainBtn = document.getElementById('goto-main');
+    const errorDiv = document.getElementById('error');
+
+    // Show/hide buttons based on auth state
+    auth.onAuthStateChanged(function(user) {
+      if (user) {
+        signinBtn.style.display = 'none';
+        gotoMainBtn.style.display = 'block';
+      } else {
+        signinBtn.style.display = 'block';
+        gotoMainBtn.style.display = 'none';
+      }
+    });
+
+    signinBtn.onclick = function() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then(() => {
+          // Auth state change will handle UI
+        })
+        .catch((error) => {
+          errorDiv.textContent = error.message;
+        });
+    };
+
+    gotoMainBtn.onclick = function() {
+      window.location.href = 'index.html';
+    };
+  </script>
+</body>
+</html> 
